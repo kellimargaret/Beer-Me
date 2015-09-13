@@ -51,126 +51,121 @@
             </div>
         </div>
     </nav>
+<body>
+    <header class="patron-header">
+        <div class="container">
+            <div class="intro-text">
+                <div class="row"></div>
+            </div>
+        </div>
+    </header>
 
-    <body>
-
-        <header class="patron-header">
-            <div class="container">
-                <div class="intro-text">
-                    <div class="row">
-                    </div>
+    <section class="layout">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Howdy, {{ user.getName }}.</h2>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <section class="layout">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <h2 class="section-heading">Howdy, {{ user.getName }}.</h2>
-                    </div>
-                </div>
-            </div>
+        <div class="border-solid">
+            <a href='/show_email_search/{{ user.getId }}'><h1>Buy a beer</h1></a>
+            {# Search for Friend by email: #}
+                {% if send_token == true %}
 
-            <div class="border-solid">
-                <a href='/show_email_search/{{ user.getId }}'><h1>Buy a beer</h1></a>
-                {# Search for Friend by email: #}
-                    {% if send_token == true %}
+                <h2>Find a friend:</h2>
 
-                    <h2>Find a friend:</h2>
-
-                        <form action='/find_friend/{{ user.getId }}'>
-                            <label for='search_email'>Your friend's email</label>
-                            <input id='search_email' name='search_email' type='text' placeholder='buddy@email.com' required>
-                            <button type='submit' class='btn btn-default btn-xs'>Search</button>
-                        </form>
-
-                    {% endif %}
-            </div>
-
-            <div class="border-solid">
-                <a href='/show_user_tokens/{{ user.getId }}'><h1>My tokens</h1></a>
-                {% if token_form == true %}
-                    {% if user_tokens is not empty %}
-                    <ul>
-                        {% for token in user_tokens | sort %}
-                            <p>
-                                <a href="/view_token/{{ token.getId }}"><button class='btn btn-warning btn-m'>{{ token.getBarName }}</button></a>
-                            </p></br>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                        <p>You don't have any tokens yet! Apparently, you don't have any cool friends either.</p>
-                    {% endif %}
-                {% endif %}
-            </div>
-
-            <div class="border-solid">
-                <a href='/show_user_edit/{{ user.getId }}'><h1>Edit Profile</h1></a>
-                {% if edit_user == true %}
-                    <form action='/edit_user/{{ user.getId }}' method='post'>
-                        <input name='_method' type='hidden' value='patch'>
-                        <label for='name'>Name</label>
-                        <input id='name' name='name' type='text' value= {{ user.getName }} required>
-                        <label for='email'>Email</label>
-                        <input id='email' name='email' type='text' value= {{ user.getEmail }} required>
-                        <button type='submit' class='btn btn-default btn-xs'>Update</button>
+                    <form action='/find_friend/{{ user.getId }}'>
+                        <label for='search_email'>Your friend's email</label>
+                        <input id='search_email' name='search_email' type='text' placeholder='buddy@email.com' required>
+                        <button type='submit' class='btn btn-default btn-xs'>Search</button>
                     </form>
-                {% endif %}
-            </div>
 
-            <div class="border-solid">
-                <a href='/show_preferred_bars/{{ user.getId }}'><h1>Your favorite bars</h1></a>
-                {% if preferred_bars == true %}
-                <h4>Here are your preferred bars:</h4>
+                {% endif %}
+        </div>
+
+        <div class="border-solid">
+            <a href='/show_user_tokens/{{ user.getId }}'><h1>My tokens</h1></a>
+            {% if token_form == true %}
+                {% if user_tokens is not empty %}
                 <ul>
-                    {% for bar in user.getPreferredBars %}
-                        <li>{{ bar.getName }}</li>
+                    {% for token in user_tokens | sort %}
+                        <p>
+                            <a href="/view_token/{{ token.getId }}"><button class='btn btn-warning btn-m'>{{ token.getBarName }}</button></a>
+                        </p></br>
                     {% endfor %}
                 </ul>
-                    <form action='/add_preferred_bar/{{ user.getId }}' method='post'>
-                        <label for='add_bar'>Participating bars</label>
-                        <select id='add_bar' name='add_bar'>
-                            {% for bar in all_bars %} {# Remove already added bars from this list #}
-                                <option value='{{ bar.getId }}'>{{ bar.getName }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type='submit' class='btn btn-default btn-xs'>Add bar</button>
-                    </form>
-                    <form action='/delete_preferred_bar/{{ user.getId }}' method='post'>
-                        <input name='_method' type='hidden' value='delete'>
-                        <label>Delete a bar</label>
-                        <select name='bar'>
-                            {% for bar in user.getPreferredBars %}
-                                <option value='{{ bar.getId }}'>{{ bar.getName }}</option>
-
-                            {% endfor %}
-                        </select>
-                        <button type='submit' class='btn btn-danger btn-xs'>Delete preferred bar</button>
-                    </form>
-
+                {% else %}
+                    <p>You don't have any tokens yet! Apparently, you don't have any cool friends either.</p>
                 {% endif %}
-            </div>
-            </div>
-            </div>
-        </section>
+            {% endif %}
+        </div>
 
-        <!-- jQuery -->
-        <script src="js/jquery.js"></script>
+        <div class="border-solid">
+            <a href='/show_user_edit/{{ user.getId }}'><h1>Edit Profile</h1></a>
+            {% if edit_user == true %}
+                <form action='/edit_user/{{ user.getId }}' method='post'>
+                    <label for='name'>Name</label>
+                    <input name='_method' type='hidden' value='patch'>
+                    <input id='name' name='name' type='text' value= {{ user.getName }} required>
+                    <label for='email'>Email</label>
+                    <input id='email' name='email' type='text' value= {{ user.getEmail }} required>
+                    <button type='submit' class='btn btn-default btn-xs'>Update</button>
+                </form>
+            {% endif %}
+        </div>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
+        <div class="border-solid">
+            <a href='/show_preferred_bars/{{ user.getId }}'><h1>Your favorite bars</h1></a>
+            {% if preferred_bars == true %}
+            <h4>Here are your preferred bars:</h4>
+            <ul>
+                {% for bar in user.getPreferredBars %}
+                    <li>{{ bar.getName }}</li>
+                {% endfor %}
+            </ul>
+                <form action='/add_preferred_bar/{{ user.getId }}' method='post'>
+                    <label for='add_bar'>Participating bars</label>
+                    <select id='add_bar' name='add_bar'>
+                        {% for bar in all_bars %} {# Remove already added bars from this list #}
+                            <option value='{{ bar.getId }}'>{{ bar.getName }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type='submit' class='btn btn-default btn-xs'>Add bar</button>
+                </form>
+                <form action='/delete_preferred_bar/{{ user.getId }}' method='post'>
+                    <input name='_method' type='hidden' value='delete'>
+                    <label>Delete a bar</label>
+                    <select name='bar'>
+                        {% for bar in user.getPreferredBars %}
+                            <option value='{{ bar.getId }}'>{{ bar.getName }}</option>
 
-        <!-- Plugin JavaScript -->
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script src="js/classie.js"></script>
-        <script src="js/cbpAnimatedHeader.js"></script>
+                        {% endfor %}
+                    </select>
+                    <button type='submit' class='btn btn-danger btn-xs'>Delete preferred bar</button>
+                </form>
 
-        <!-- Contact Form JavaScript -->
-        <!-- // <script src="js/jqBootstrapValidation.js"></script> -->
-        <script src="js/contact_me.js"></script>
+            {% endif %}
+        </div>
+    </section>
 
-        <!-- Custom Theme JavaScript -->
-        <script src="js/agency.js"></script>
-    </body>
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <!-- // <script src="js/jqBootstrapValidation.js"></script> -->
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/agency.js"></script>
+</body>
 </html>
